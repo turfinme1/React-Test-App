@@ -1,2 +1,0 @@
-# blog-project
- Blog project
