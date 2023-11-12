@@ -1,0 +1,18 @@
+.navBar{
+    flex: 1;
+    justify-content:start;
+    display: flex;
+}
+
+.navBar ul{
+    display: flex;
+    list-style: none;
+    column-gap: 2.5em;
+    flex-wrap:wrap;
+    padding-left: 0;
+} 
+
+.navBar ul li a{
+    text-decoration:none;
+    color:black;
+} 

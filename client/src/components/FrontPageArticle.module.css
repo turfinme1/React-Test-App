@@ -1,4 +1,4 @@
-.main-article-area{
+.frontPageArticleArea{
     display: flex;
     height: 100vh;
     background-image: url('../../public/main-article-pic.jpg');
@@ -8,11 +8,10 @@
     font-size:1.5em;
    
 }
-
-.main-article{
+.mainArticle{
     padding-left: 20vh;
     padding-top: 20vh;
 }
-.main-article-area img{
+img{
     object-fit:fill;
 } 

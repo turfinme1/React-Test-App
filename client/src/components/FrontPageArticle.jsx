@@ -1,9 +1,9 @@
-import '../styles/front-page-article.css';
+import styles from './FrontPageArticle.module.css'
 
 export default function FrontPageArticle(props){
     return (
-      <div className="main-article-area">
-        <article className='main-article'>
+      <div className={styles.frontPageArticleArea}>
+        <article className={styles.mainArticle}>
           <button>Hot</button>
           <h2>8 Best Excercises</h2>
           <p>Long time readers watch this</p>

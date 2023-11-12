@@ -1,6 +1,8 @@
-export default function Navbar(props){
+import styles from './NavBar.module.css'
+
+export default function NavBar(props){
     return (
-      <div className="nav-bar">
+      <div className={styles.navBar}>
         <nav>
           <ul>
             <li>
