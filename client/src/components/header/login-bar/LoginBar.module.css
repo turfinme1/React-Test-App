@@ -1,9 +1,21 @@
 .loginBar{
-    flex: 1;    
-    justify-content:end;
+    flex: 1;
     display: flex;
+    justify-content:end;
+    column-gap: 2.5em;
+    align-items: center;
+    padding-right: 10em;
 }  
 
+.register {
+    background: rgb(184, 22, 17);
+    color: rgba(255, 255, 255, 0.964);
+    padding: 10px 20px;
+    border-radius:12px;
+    transition: 0.4s;
+}
+
+/* 
 .buttons{
     align-items:center;
     display: flex;
@@ -11,17 +23,10 @@
     column-gap: 2.5em;
     flex-wrap:wrap;
     padding-left: 0;
-} 
+}  */
 
-.buttons li:last-child {
-    background: rgb(184, 22, 17);
-    padding: 10px 20px;
-    border-radius:8px;
-    transition: 0.4s;
 
-}
-
-.buttons li:last-child:hover {
+/* .buttons li:last-child:hover {
     background: rgb(6, 15, 113);
     padding: 10px 20px;
     border-radius:8px;
@@ -35,4 +40,4 @@
 .buttons li a{
     text-decoration:none;
     color:black;
-}
+} */

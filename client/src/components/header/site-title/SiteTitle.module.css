@@ -1,0 +1,9 @@
+.siteTitle{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    color: rgb(149, 166, 166);
+    font-family: "Rubik Bubbles", sans-serif;
+    font-size: 48px;
+    word-spacing: 10px;
+}

@@ -1,6 +1,6 @@
-import styles from './FrontPageArticle.module.css'
+import styles from './Home.module.css'
 
-export default function FrontPageArticle(props){
+export default function Home(props){
     return (
       <div className={styles.frontPageArticleArea}>
         <article className={styles.mainArticle}>
