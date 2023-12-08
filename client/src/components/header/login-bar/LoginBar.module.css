@@ -1,20 +1,35 @@
-.loginBar{
-    flex: 1;
-    display: flex;
-    justify-content:end;
-    column-gap: 2.5em;
-    align-items: center;
-    padding-right: 10em;
-}  
-
-.register {
-    background: rgb(184, 22, 17);
-    color: rgba(255, 255, 255, 0.964);
-    padding: 10px 20px;
-    border-radius:12px;
-    transition: 0.4s;
+.loginBar {
+  flex: 1;
+  display: flex;
+  justify-content: end;
+  column-gap: 2.5em;
+  align-items: center;
+  padding-right: 10em;
 }
 
+.register {
+  background: rgb(184, 22, 17);
+  color: #f5f6fa;
+  padding: 10px 20px;
+  border-radius: 12px;
+  transition: 0.5s;
+}
+
+.register:hover {
+  background: #f5f6fa;
+  color: #e84118;
+  transition: 0.5s;
+}
+
+.sign {
+  color: #f5f6fa;
+  transition: 0.5s;
+}
+
+.sign:hover {
+  color: #e84118;
+  transition: 0.5s;
+}
 /* 
 .buttons{
     align-items:center;
@@ -24,7 +39,6 @@
     flex-wrap:wrap;
     padding-left: 0;
 }  */
-
 
 /* .buttons li:last-child:hover {
     background: rgb(6, 15, 113);

@@ -1,0 +1,7 @@
+.articleList{
+    flex-wrap: wrap;
+    gap: 1.5em 2em;
+}
+.articleTitle{
+    margin: 1em auto;
+}

@@ -10,4 +10,5 @@ header {
   height: 100px;
   border-radius: 6;
   border: 1px solid #40a9ff;
+  border-bottom: 3px solid #e842185d;
 }

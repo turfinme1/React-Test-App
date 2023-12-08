@@ -2,8 +2,13 @@
     flex: 1;
     display: flex;
     justify-content: center;
-    color: rgb(149, 166, 166);
+    color: #f5f6fa;
     font-family: "Rubik Bubbles", sans-serif;
     font-size: 48px;
     word-spacing: 10px;
+    transition: 0.5s;
+}
+.siteTitle:hover{
+    color: #e84118;
+    transition: 0.5s;
 }

@@ -1,7 +1,7 @@
 .frontPageArticleArea{
     display: flex;
     height: 100vh;
-    background-image: url('../../public/main-article-pic.jpg');
+    background-image: url('../../../public/main-article-pic.jpg');
     background-size:cover;
     background-repeat: no-repeat;
     color: rgb(222, 220, 220);

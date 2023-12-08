@@ -5,6 +5,13 @@
     column-gap: 2.5em;
     padding-left: 10em;
 }
+.navBar a{
+    color: #f5f6fa;
+}
+.navBar a:hover{
+    color: #e84118;
+    transition: 0.5s;
+}
 
 /* 
 .navBar ul{

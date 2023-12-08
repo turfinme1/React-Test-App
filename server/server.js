@@ -93,7 +93,7 @@
             // NOTE: the OPTIONS method results in undefined result and also it never processes plugins - keep this in mind
             if (method == 'OPTIONS') {
                 Object.assign(headers, {
-                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
                     'Access-Control-Allow-Credentials': false,
                     'Access-Control-Max-Age': '86400',
                     'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, X-Authorization, X-Admin'
@@ -520,7 +520,6 @@
         let responseData;
 
         try {
-            console.log(query.where);
             if (query.where) {
                 responseData = context.storage.get(context.params.collection).filter(parseWhere(query.where));
             } else if (context.params.collection) {
@@ -750,7 +749,7 @@
         };
     };
 
-    var require$$0 = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>SUPS Admin Panel</title>\r\n    <style>\r\n        * {\r\n            padding: 0;\r\n            margin: 0;\r\n        }\r\n\r\n        body {\r\n            padding: 32px;\r\n            font-size: 16px;\r\n        }\r\n\r\n        .layout::after {\r\n            content: '';\r\n            clear: both;\r\n            display: table;\r\n        }\r\n\r\n        .col {\r\n            display: block;\r\n            float: left;\r\n        }\r\n\r\n        p {\r\n            padding: 8px 16px;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse;\r\n        }\r\n\r\n        caption {\r\n            font-size: 120%;\r\n            text-align: left;\r\n            padding: 4px 8px;\r\n            font-weight: bold;\r\n            background-color: #ddd;\r\n        }\r\n\r\n        table, tr, th, td {\r\n            border: 1px solid #ddd;\r\n        }\r\n\r\n        th, td {\r\n            padding: 4px 8px;\r\n        }\r\n\r\n        ul {\r\n            list-style: none;\r\n        }\r\n\r\n        .collection-list a {\r\n            display: block;\r\n            width: 120px;\r\n            padding: 4px 8px;\r\n            text-decoration: none;\r\n            color: black;\r\n            background-color: #ccc;\r\n        }\r\n        .collection-list a:hover {\r\n            background-color: #ddd;\r\n        }\r\n        .collection-list a:visited {\r\n            color: black;\r\n        }\r\n    </style>\r\n    <script type=\"module\">\nimport { html, render } from 'https://unpkg.com/lit-html?module';\nimport { until } from 'https://unpkg.com/lit-html/directives/until?module';\n\nconst api = {\r\n    async get(url) {\r\n        return json(url);\r\n    },\r\n    async post(url, body) {\r\n        return json(url, {\r\n            method: 'POST',\r\n            headers: { 'Content-Type': 'application/json' },\r\n            body: JSON.stringify(body)\r\n        });\r\n    }\r\n};\r\n\r\nasync function json(url, options) {\r\n    return await (await fetch('/' + url, options)).json();\r\n}\r\n\r\nasync function getCollections() {\r\n    return api.get('data');\r\n}\r\n\r\nasync function getRecords(collection) {\r\n    return api.get('data/' + collection);\r\n}\r\n\r\nasync function getThrottling() {\r\n    return api.get('util/throttle');\r\n}\r\n\r\nasync function setThrottling(throttle) {\r\n    return api.post('util', { throttle });\r\n}\n\nasync function collectionList(onSelect) {\r\n    const collections = await getCollections();\r\n\r\n    return html`\r\n    <ul class=\"collection-list\">\r\n        ${collections.map(collectionLi)}\r\n    </ul>`;\r\n\r\n    function collectionLi(name) {\r\n        return html`<li><a href=\"javascript:void(0)\" @click=${(ev) => onSelect(ev, name)}>${name}</a></li>`;\r\n    }\r\n}\n\nasync function recordTable(collectionName) {\r\n    const records = await getRecords(collectionName);\r\n    const layout = getLayout(records);\r\n\r\n    return html`\r\n    <table>\r\n        <caption>${collectionName}</caption>\r\n        <thead>\r\n            <tr>${layout.map(f => html`<th>${f}</th>`)}</tr>\r\n        </thead>\r\n        <tbody>\r\n            ${records.map(r => recordRow(r, layout))}\r\n        </tbody>\r\n    </table>`;\r\n}\r\n\r\nfunction getLayout(records) {\r\n    const result = new Set(['_id']);\r\n    records.forEach(r => Object.keys(r).forEach(k => result.add(k)));\r\n\r\n    return [...result.keys()];\r\n}\r\n\r\nfunction recordRow(record, layout) {\r\n    return html`\r\n    <tr>\r\n        ${layout.map(f => html`<td>${JSON.stringify(record[f]) || html`<span>(missing)</span>`}</td>`)}\r\n    </tr>`;\r\n}\n\nasync function throttlePanel(display) {\r\n    const active = await getThrottling();\r\n\r\n    return html`\r\n    <p>\r\n        Request throttling: </span>${active}</span>\r\n        <button @click=${(ev) => set(ev, true)}>Enable</button>\r\n        <button @click=${(ev) => set(ev, false)}>Disable</button>\r\n    </p>`;\r\n\r\n    async function set(ev, state) {\r\n        ev.target.disabled = true;\r\n        await setThrottling(state);\r\n        display();\r\n    }\r\n}\n\n//import page from '//unpkg.com/page/page.mjs';\r\n\r\n\r\nfunction start() {\r\n    const main = document.querySelector('main');\r\n    editor(main);\r\n}\r\n\r\nasync function editor(main) {\r\n    let list = html`<div class=\"col\">Loading&hellip;</div>`;\r\n    let viewer = html`<div class=\"col\">\r\n    <p>Select collection to view records</p>\r\n</div>`;\r\n    display();\r\n\r\n    list = html`<div class=\"col\">${await collectionList(onSelect)}</div>`;\r\n    display();\r\n\r\n    async function display() {\r\n        render(html`\r\n        <section class=\"layout\">\r\n            ${until(throttlePanel(display), html`<p>Loading</p>`)}\r\n        </section>\r\n        <section class=\"layout\">\r\n            ${list}\r\n            ${viewer}\r\n        </section>`, main);\r\n    }\r\n\r\n    async function onSelect(ev, name) {\r\n        ev.preventDefault();\r\n        viewer = html`<div class=\"col\">${await recordTable(name)}</div>`;\r\n        display();\r\n    }\r\n}\r\n\r\nstart();\n\n</script>\r\n</head>\r\n<body>\r\n    <main>\r\n        Loading&hellip;\r\n    </main>\r\n</body>\r\n</html>";
+    var require$$0 = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>SUPS Admin Panel</title>\r\n    <style>\r\n        * {\r\n            padding: 0;\r\n            margin: 0;\r\n        }\r\n\r\n        body {\r\n            padding: 32px;\r\n            font-size: 16px;\r\n        }\r\n\r\n        .layout::after {\r\n            content: '';\r\n            clear: both;\r\n            display: table;\r\n        }\r\n\r\n        .col {\r\n            display: block;\r\n            float: left;\r\n        }\r\n\r\n        p {\r\n            padding: 8px 16px;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse;\r\n        }\r\n\r\n        caption {\r\n            font-size: 120%;\r\n            text-align: left;\r\n            padding: 4px 8px;\r\n            font-weight: bold;\r\n            background-color: #ddd;\r\n        }\r\n\r\n        table, tr, th, td {\r\n            border: 1px solid #ddd;\r\n        }\r\n\r\n        th, td {\r\n            padding: 4px 8px;\r\n        }\r\n\r\n        ul {\r\n            list-style: none;\r\n        }\r\n\r\n        .collection-list a {\r\n            display: block;\r\n            width: 120px;\r\n            padding: 4px 8px;\r\n            text-decoration: none;\r\n            color: black;\r\n            background-color: #ccc;\r\n        }\r\n        .collection-list a:hover {\r\n            background-color: #ddd;\r\n        }\r\n        .collection-list a:visited {\r\n            color: black;\r\n        }\r\n    </style>\r\n    <script type=\"module\">\nimport { html, render } from 'https://unpkg.com/lit-html@1.3.0?module';\nimport { until } from 'https://unpkg.com/lit-html@1.3.0/directives/until?module';\n\nconst api = {\r\n    async get(url) {\r\n        return json(url);\r\n    },\r\n    async post(url, body) {\r\n        return json(url, {\r\n            method: 'POST',\r\n            headers: { 'Content-Type': 'application/json' },\r\n            body: JSON.stringify(body)\r\n        });\r\n    }\r\n};\r\n\r\nasync function json(url, options) {\r\n    return await (await fetch('/' + url, options)).json();\r\n}\r\n\r\nasync function getCollections() {\r\n    return api.get('data');\r\n}\r\n\r\nasync function getRecords(collection) {\r\n    return api.get('data/' + collection);\r\n}\r\n\r\nasync function getThrottling() {\r\n    return api.get('util/throttle');\r\n}\r\n\r\nasync function setThrottling(throttle) {\r\n    return api.post('util', { throttle });\r\n}\n\nasync function collectionList(onSelect) {\r\n    const collections = await getCollections();\r\n\r\n    return html`\r\n    <ul class=\"collection-list\">\r\n        ${collections.map(collectionLi)}\r\n    </ul>`;\r\n\r\n    function collectionLi(name) {\r\n        return html`<li><a href=\"javascript:void(0)\" @click=${(ev) => onSelect(ev, name)}>${name}</a></li>`;\r\n    }\r\n}\n\nasync function recordTable(collectionName) {\r\n    const records = await getRecords(collectionName);\r\n    const layout = getLayout(records);\r\n\r\n    return html`\r\n    <table>\r\n        <caption>${collectionName}</caption>\r\n        <thead>\r\n            <tr>${layout.map(f => html`<th>${f}</th>`)}</tr>\r\n        </thead>\r\n        <tbody>\r\n            ${records.map(r => recordRow(r, layout))}\r\n        </tbody>\r\n    </table>`;\r\n}\r\n\r\nfunction getLayout(records) {\r\n    const result = new Set(['_id']);\r\n    records.forEach(r => Object.keys(r).forEach(k => result.add(k)));\r\n\r\n    return [...result.keys()];\r\n}\r\n\r\nfunction recordRow(record, layout) {\r\n    return html`\r\n    <tr>\r\n        ${layout.map(f => html`<td>${JSON.stringify(record[f]) || html`<span>(missing)</span>`}</td>`)}\r\n    </tr>`;\r\n}\n\nasync function throttlePanel(display) {\r\n    const active = await getThrottling();\r\n\r\n    return html`\r\n    <p>\r\n        Request throttling: </span>${active}</span>\r\n        <button @click=${(ev) => set(ev, true)}>Enable</button>\r\n        <button @click=${(ev) => set(ev, false)}>Disable</button>\r\n    </p>`;\r\n\r\n    async function set(ev, state) {\r\n        ev.target.disabled = true;\r\n        await setThrottling(state);\r\n        display();\r\n    }\r\n}\n\n//import page from '//unpkg.com/page/page.mjs';\r\n\r\n\r\nfunction start() {\r\n    const main = document.querySelector('main');\r\n    editor(main);\r\n}\r\n\r\nasync function editor(main) {\r\n    let list = html`<div class=\"col\">Loading&hellip;</div>`;\r\n    let viewer = html`<div class=\"col\">\r\n    <p>Select collection to view records</p>\r\n</div>`;\r\n    display();\r\n\r\n    list = html`<div class=\"col\">${await collectionList(onSelect)}</div>`;\r\n    display();\r\n\r\n    async function display() {\r\n        render(html`\r\n        <section class=\"layout\">\r\n            ${until(throttlePanel(display), html`<p>Loading</p>`)}\r\n        </section>\r\n        <section class=\"layout\">\r\n            ${list}\r\n            ${viewer}\r\n        </section>`, main);\r\n    }\r\n\r\n    async function onSelect(ev, name) {\r\n        ev.preventDefault();\r\n        viewer = html`<div class=\"col\">${await recordTable(name)}</div>`;\r\n        display();\r\n    }\r\n}\r\n\r\nstart();\n\n</script>\r\n</head>\r\n<body>\r\n    <main>\r\n        Loading&hellip;\r\n    </main>\r\n</body>\r\n</html>";
 
     const mode = process.argv[2] == '-dev' ? 'dev' : 'prod';
 
@@ -1320,6 +1319,11 @@
     var identity = "email";
     var protectedData = {
     	users: {
+    		"00c62d76-8152-4626-8712-eeb96381bea8": {
+    			email: "bobi@abv.bg",
+    			username: "Bobbu",
+    			hashedPassword: "83313014ed3e2391aa1332615d2f053cf5c1bfe05ca1cbcb5582443822df6eb1"
+    		},
     		"35c62d76-8152-4626-8712-eeb96381bea8": {
     			email: "peter@abv.bg",
     			username: "Peter",
@@ -1339,7 +1343,147 @@
     	sessions: {
     	}
     };
-    var seedData = {};
+    var seedData = {
+    	comments: {
+    		"0a272c58-b7ea-4e09-a000-7ec988248f66": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			content: "Great recipe!",
+    			recipeId: "8f414b4f-ab39-4d36-bedb-2ad69da9c830",
+    			_createdOn: 1614260681375,
+    			_id: "0a272c58-b7ea-4e09-a000-7ec988248f66"
+    		}
+    	},
+    	articles: {
+    		"12345678-90ab-cdef-1234-567890abcdef": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Top 10 Tips for Healthy Living",
+    			description: "Discover practical tips for maintaining a healthy lifestyle.",
+    			articleText: "In today's fast-paced world, maintaining a healthy lifestyle is crucial. Incorporating a balanced diet, regular exercise, and sufficient sleep are fundamental aspects of well-being. It's essential to stay hydrated and manage stress through mindfulness practices. Additionally, fostering positive social connections contributes to mental and emotional health. Make time for hobbies and activities you enjoy to enhance overall happiness and life satisfaction.",
+    			imgUrl: "https://www.healthifyme.com/blog/wp-content/uploads/2020/01/gym-diet-cover-1.jpg",
+    			_createdOn: 1641589321000,
+    			_id: "12345678-90ab-cdef-1234-567890abcdef"
+    		},
+    		"a1b2c3d4-e5f6-7890-abcdef123456": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Mindfulness Meditation for Beginners",
+    			description: "Explore the benefits of mindfulness meditation and how to get started.",
+    			articleText: "Mindfulness meditation is a powerful practice that helps individuals cultivate awareness and presence. Begin by finding a quiet space, sitting comfortably, and focusing on your breath. Gradually, expand your awareness to sensations, thoughts, and emotions without judgment. Regular practice can reduce stress, improve concentration, and enhance overall well-being. As a beginner, start with short sessions and gradually extend the duration as you become more comfortable with the practice.",
+    			imgUrl: "https://www.elevatenutrition.com/wp-content/uploads/energizing-diet-can-fuel-your-fitness-and-weight-loss.jpg",
+    			_createdOn: 1641589456000,
+    			_id: "a1b2c3d4-e5f6-7890-abcdef123456"
+    		},
+    		"5a6b7c8d-9e0f-1234-5678-90abcdef0123": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "The Benefits of High-Intensity Interval Training (HIIT)",
+    			description: "Learn about the advantages of incorporating HIIT into your fitness routine.",
+    			articleText: "High-Intensity Interval Training (HIIT) is a popular and effective workout strategy. It involves alternating short bursts of intense exercise with brief periods of rest or lower-intensity activity. This approach can boost cardiovascular fitness, burn calories, and improve metabolic rate. HIIT is adaptable to various fitness levels and can be done with minimal equipment. It offers time-efficient workouts, making it ideal for individuals with busy schedules looking to maximize their exercise benefits.",
+    			imgUrl: "https://files.selecthealth.cloud/api/public/content/225567-Weights_fruit_blog_lg.jpg",
+    			_createdOn: 1641589582000,
+    			_id: "5a6b7c8d-9e0f-1234-5678-90abcdef0123"
+    		},
+    		"a2b3c4d5-e6f7-8901-2345-6789abcdef01": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "The Power of Superfoods for Improved Health",
+    			description: "Explore the nutritional benefits of incorporating superfoods into your diet.",
+    			articleText: "Superfoods are nutrient-dense foods that offer a plethora of health benefits. Examples include berries, kale, chia seeds, and salmon. These foods are rich in antioxidants, vitamins, and minerals, supporting overall health and well-being. Learn how to integrate superfoods into your meals to enhance your nutritional intake and promote a stronger immune system.",
+    			imgUrl: "https://wellness.nifs.org/hubfs/GettyImages-1363588189.jpg",
+    			_createdOn: 1641590000000,
+    			_id: "a2b3c4d5-e6f7-8901-2345-6789abcdef01"
+    		},
+    		"b4c5d6e7-f8g9-0123-4567-89abcdef0123": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Effective Cardio Workouts for Weight Loss",
+    			description: "Discover cardio exercises that can help you shed excess weight and improve cardiovascular health.",
+    			articleText: "Cardiovascular exercise is essential for weight loss and heart health. Engage in activities like running, cycling, and jumping rope to burn calories and boost your metabolism. High-intensity interval training (HIIT) is particularly effective for fat loss. Combine cardio workouts with a balanced diet for optimal results. Consult with a fitness professional to create a personalized cardio routine that suits your fitness level and goals.",
+    			imgUrl: "https://miro.medium.com/v2/resize:fit:900/0*JPUFjuYrDSyWrQjS.png",
+    			_createdOn: 1641590123000,
+    			_id: "b4c5d6e7-f8g9-0123-4567-89abcdef0123"
+    		},
+    		"c6d7e8f9-g0h1-2345-6789-abcd01234567": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Balanced Meal Planning for Sustainable Weight Management",
+    			description: "Learn how to create balanced meals that support healthy weight management.",
+    			articleText: "Achieving and maintaining a healthy weight involves more than just counting calories. Focus on creating balanced meals that include a mix of lean proteins, whole grains, fruits, and vegetables. Portion control is key, and incorporating a variety of nutrient-dense foods ensures you receive essential vitamins and minerals. Consult with a registered dietitian to develop a personalized meal plan tailored to your nutritional needs and weight management goals.",
+    			imgUrl: "https://www.istudy.org.uk/wp-content/uploads/2017/08/KK1-ADVANCED-DIET-FITNESS-AND-NUTRITION-COURSE.jpg",
+    			_createdOn: 1641590245000,
+    			_id: "c6d7e8f9-g0h1-2345-6789-abcd01234567"
+    		},
+    		"d8e9f0g1-h2i3-4567-89ab-cdef01234567": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Building Lean Muscle Mass: Tips and Techniques",
+    			description: "Explore effective strategies for building lean muscle mass and sculpting your physique.",
+    			articleText: "Building lean muscle is a multifaceted process that involves resistance training, proper nutrition, and adequate rest. Incorporate compound exercises such as squats and deadlifts into your workout routine to target multiple muscle groups. Consume an adequate amount of protein to support muscle growth, and ensure you get enough rest for recovery. Consult with a fitness professional to design a customized strength training program that aligns with your fitness goals.",
+    			imgUrl: "https://www.nmhfc.com/wp-content/uploads/sites/34/2020/01/PWM-1114516_BlogPost_Image_Jan_14.jpg",
+    			_createdOn: 1641590367000,
+    			_id: "d8e9f0g1-h2i3-4567-89ab-cdef01234567"
+    		},
+    		"h3i4j5k6-l7m8-9012-3456-789abcdef012": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "The Role of Hydration in Fitness and Performance",
+    			description: "Understand the importance of proper hydration for optimal physical performance.",
+    			articleText: "Staying hydrated is essential for overall health and plays a crucial role in physical performance. Dehydration can negatively impact endurance, strength, and cognitive function. Ensure you drink an adequate amount of water throughout the day, especially before, during, and after exercise. Consider factors such as climate, activity level, and individual needs when determining your hydration requirements. Proper hydration supports efficient nutrient transport and helps prevent fatigue during workouts.",
+    			imgUrl: "https://www.bosshunting.com.au/cdn-cgi/imagedelivery/izM8XxyLg9MD6py1ribxJw/www.bosshunting.com.au/2020/03/the-rock-working-out.jpg/w=1024,h=722",
+    			_createdOn: 1641590490000,
+    			_id: "h3i4j5k6-l7m8-9012-3456-789abcdef012"
+    		},
+    		"i5j6k7l8-m9n0-1234-5678-9abcdef01234": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Mindful Eating: A Holistic Approach to Nutrition",
+    			description: "Learn how practicing mindful eating can foster a healthier relationship with food.",
+    			articleText: "Mindful eating involves paying attention to the sensory experience of eating and being fully present during meals. This practice can help you make healthier food choices, prevent overeating, and savor the flavors of your meals. To cultivate mindful eating habits, slow down, chew your food thoroughly, and appreciate each bite. Disconnect from distractions like screens during meals to enhance your awareness of hunger and fullness cues.",
+    			imgUrl: "https://cst.brightspotcdn.com/dims4/default/a3fda78/2147483647/strip/false/crop/8688x5792+0+0/resize/1486x991!/quality/90/?url=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FAMQIqxI3UqyfbJjDFUQ5JT557do%3D%2F0x0%3A8688x5792%2F8688x5792%2Ffilters%3Afocal%284301x2762%3A4302x2763%29%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_asset%2Ffile%2F24149488%2FAdobeStock_314363407.jpeg",
+    			_createdOn: 1641590612000,
+    			_id: "i5j6k7l8-m9n0-1234-5678-9abcdef01234"
+    		},
+    		"j9k0l1m2-n3o4-5678-90ab-cdef01234567": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Functional Fitness: Training for Real-Life Activities",
+    			description: "Explore the concept of functional fitness and its relevance to everyday activities.",
+    			articleText: "Functional fitness focuses on exercises that mimic real-life movements, improving strength and flexibility for daily activities. Incorporate compound exercises like lunges, squats, and core workouts to enhance your ability to perform everyday tasks. This type of training can reduce the risk of injuries and improve overall mobility. Consult with a fitness professional to design a functional fitness routine tailored to your specific needs and lifestyle.",
+    			imgUrl: "https://trainstationgym.co.za/wp-content/uploads/2021/06/Banner-pic-2.jpg",
+    			_createdOn: 1641590734000,
+    			_id: "j9k0l1m2-n3o4-5678-90ab-cdef01234567"
+    		},
+    		"k2l3m4n5-o6p7-8901-2345-6789abcdef012": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Understanding Macronutrients: A Guide to Balanced Nutrition",
+    			description: "Gain insights into the role of macronutrients and how to achieve a well-balanced diet.",
+    			articleText: "Macronutrients, including carbohydrates, proteins, and fats, are essential for maintaining good health. Each macronutrient plays a unique role in the body, supporting functions such as energy production, muscle repair, and hormone regulation. Achieving a well-balanced diet involves understanding the optimal ratio of macronutrients for your individual needs. Consult with a registered dietitian to create a personalized nutrition plan that aligns with your fitness goals and lifestyle.",
+    			imgUrl: "https://prod-ne-cdn-media.puregym.com/media/819394/gym-workout-plan-for-gaining-muscle_header.jpg?quality=80",
+    			_createdOn: 1641590856000,
+    			_id: "k2l3m4n5-o6p7-8901-2345-6789abcdef012"
+    		},
+    		"m5n6o7p8-q9r0-1234-5678-9abcdef01234": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Circuit Training for Total Body Conditioning",
+    			description: "Discover the benefits of circuit training for a comprehensive and time-efficient workout.",
+    			articleText: "Circuit training involves moving through a series of exercises with minimal rest between each one, providing a full-body workout. This approach combines cardiovascular and strength training, promoting calorie burning and muscle toning. Create a circuit routine that includes exercises targeting different muscle groups. Adjust the intensity and duration based on your fitness level and goals. Circuit training is an effective option for individuals seeking a time-efficient and versatile workout.",
+    			imgUrl: "https://media1.popsugar-assets.com/files/thumbor/JQC7l7k3pNAa6X_P5A0FZLM3djg/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2019/01/09/791/n/1922729/7c3fdfd55c36369f01cc85.50407843_/i/Total-Body-Conditioning-Workout.jpg",
+    			_createdOn: 1641590978000,
+    			_id: "m5n6o7p8-q9r0-1234-5678-9abcdef01234"
+    		},
+    		"n9o0p1q2-r3s4-5678-90ab-cdef01234567": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "The Importance of Post-Workout Nutrition",
+    			description: "Learn about the significance of proper nutrition after exercise for recovery and muscle growth.",
+    			articleText: "Post-workout nutrition is crucial for replenishing energy stores and supporting muscle recovery. Consume a combination of carbohydrates and protein within the first hour after exercise to optimize recovery. This helps restore glycogen levels and promotes muscle protein synthesis. Consider incorporating sources of antioxidants to combat exercise-induced oxidative stress. Tailor your post-workout nutrition to the type and intensity of your exercise routine for optimal results.",
+    			imgUrl: "https://traffordleisure.co.uk/wp-content/uploads/2019/01/iStock-863848724-optimised.jpg",
+    			_createdOn: 1641591100000,
+    			_id: "n9o0p1q2-r3s4-5678-90ab-cdef01234567"
+    		},
+    		"o2p3q4r5-s6t7-8901-2345-6789abcdef012": {
+    			_ownerId: "00c62d76-8152-4626-8712-eeb96381bea8",
+    			title: "Yoga for Flexibility and Mind-Body Connection",
+    			description: "Explore the benefits of yoga for enhancing flexibility and fostering a mind-body connection.",
+    			articleText: "Yoga is a holistic practice that combines physical postures, breath control, and meditation. Regular practice enhances flexibility, balance, and strength while promoting relaxation and stress reduction. Incorporate different styles of yoga, such as Hatha or Vinyasa, into your routine to experience a variety of benefits. Whether you're a beginner or experienced practitioner, yoga offers a versatile and accessible way to improve both physical and mental well-being.",
+    			imgUrl: "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/LVWAMMFSAQI6RC2TKAIWO2HETE.jpg&w=1200",
+    			_createdOn: 1641591222000,
+    			_id: "o2p3q4r5-s6t7-8901-2345-6789abcdef012"
+    		}
+    	},
+    	likes: {
+    	}
+    };
     var rules$1 = {
     	users: {
     		".create": false,
@@ -1349,6 +1493,18 @@
     		".update": false,
     		".delete": false
     	},
+    	members: {
+    		".update": "isOwner(user, get('teams', data.teamId))",
+    		".delete": "isOwner(user, get('teams', data.teamId)) || isOwner(user, data)",
+    		"*": {
+    			teamId: {
+    				".update": "newData.teamId = data.teamId"
+    			},
+    			status: {
+    				".create": "newData.status = 'pending'"
+    			}
+    		}
+    	}
     };
     var settings = {
     	identity: identity,
