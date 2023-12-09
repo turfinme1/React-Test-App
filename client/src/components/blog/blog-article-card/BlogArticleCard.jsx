@@ -3,9 +3,9 @@ import { Avatar, Card } from "antd";
 import styles from "./BlogArticleCard.module.css";
 
 const { Meta } = Card;
-
+// da se mahnat props i da se simulira nov fetch za tqh kato se natisne karti4kata za more info
 export default function BlogArticleCard({
-  title, description, articleText, imgUrl, _id, _ownerId, _createdOn
+  title, description, articleText, imgUrl, _id, _ownerId, _createdOn,
 }) {
   return (
     <Card hoverable

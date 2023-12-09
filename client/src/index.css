@@ -2,18 +2,30 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
   margin: 0;
   padding: 0;
   font-weight: normal;
 }
 
-:root{
-  background-color: #2C3A47;
+:root {
+  background: rgb(116,117,122);
+background: linear-gradient(176deg, rgba(116,117,122,1) 0%, rgba(46,23,25,1) 100%);
 }
 
 /* :root {
