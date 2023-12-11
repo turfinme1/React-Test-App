@@ -1,7 +1,10 @@
 import { Button, Flex, Form, Input, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 
+import * as authService from "../../services/authService";
+
 import styles from "./Login.module.css";
+import useUserAuth from "../store/useUserAuth";
 
 const formItemLayout = {
   labelCol: {
@@ -23,14 +26,24 @@ const formItemLayout = {
 };
 
 export default function Login() {
+  const { login } = useUserAuth((state) => ({ login: state.login }));
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const onFinish = (values) => {
+
+  const onFinish = async (values) => {
     console.log("Success:", values);
-    form.resetFields();
+    // const result = authService
+    //   .login(values)
+    //   .then((result) => console.log(result))
+    //   .catch(() => onFinishFailed("user doesnt exist"));
+
+    const result = await login(values);
+
+    // form.resetFields();
     // ako si na register i sled tova na login shte te vurne na register vupreki che si lognat?
-    navigate(-1);
+    navigate("/");
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };

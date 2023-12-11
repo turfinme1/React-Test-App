@@ -7,8 +7,8 @@
 }
 .aboutUs {
   height: 80px;
-  padding-left: 5em;
-  padding-right: 5em;
+  padding-left: 10em;
+  padding-right: 10em;
   flex-wrap: wrap;
 }
 .info {
@@ -19,8 +19,8 @@
   align-items: center;
 }
 .copyNav {
-  padding-left: 5em;
-  padding-right: 5em;
+  padding-left: 10em;
+  padding-right: 10em;
   background: #202020;
   height: 50px;
   align-items: center;

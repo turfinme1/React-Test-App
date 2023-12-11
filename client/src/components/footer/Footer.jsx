@@ -1,6 +1,7 @@
 import { Flex } from "antd";
-import styles from "./Footer.module.css";
+import { GithubFilled} from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
   return (
@@ -26,7 +27,8 @@ export default function Footer() {
           </p>
         </div>
         <div className={styles.repo}>
-            <a href="https://github.com/turfinme1/React-Test-App">Web-App</a>
+          <GithubFilled />
+            <a href="https://github.com/turfinme1/React-Test-App">Source</a>
         </div>
         <div className={styles.footerMenu}>
           <ul>

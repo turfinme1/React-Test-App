@@ -7,13 +7,13 @@ export const register = async (userData) => {
   return result;
 };
 
-export const login = async (username, password) => {
-  const result = await request.post(`${baseUrl}/login`, { username, password });
+export const login = async (userData) => {
+  const result = await request.post(`${baseUrl}/login`, { ...userData});
   return result;
 };
 
-export const logout = async (token = null) => {
-  const result = await request.get(`${baseUrl}/logout`, { token });
+export const logout = async () => {
+  const result = await request.get(`${baseUrl}/logout`);
   return result;
   // can logout without token?
   // no return result?

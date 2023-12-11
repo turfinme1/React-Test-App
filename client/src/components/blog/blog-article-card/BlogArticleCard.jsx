@@ -1,4 +1,4 @@
-import {EditOutlined, EllipsisOutlined, SettingOutlined} from "@ant-design/icons";
+import {EditOutlined, EllipsisOutlined, SettingOutlined,CommentOutlined} from "@ant-design/icons";
 import { Avatar, Card } from "antd";
 import styles from "./BlogArticleCard.module.css";
 
@@ -19,8 +19,7 @@ export default function BlogArticleCard({
         />
       }
       actions={[
-        <SettingOutlined key="setting" />,
-        <EditOutlined key="edit" />,
+        <CommentOutlined key="comment"/>,
         <EllipsisOutlined key="ellipsis" />,
       ]}
     >
