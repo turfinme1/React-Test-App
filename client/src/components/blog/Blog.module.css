@@ -1,7 +1,16 @@
-.articleList{
-    flex-wrap: wrap;
-    gap: 1.5em 2em;
+.articleList {
+  flex-wrap: wrap;
+  gap: 1.5em 2em;
 }
-.articleTitle{
-    margin: 1em auto;
+
+.articleOptions {
+  align-items: center;
+  justify-content: space-between;
+  width: 78vw;
+  margin: 1em;
+  flex-wrap: wrap;
+}
+
+.articleHeading {
+  font-weight: 700;
 }

@@ -5,7 +5,7 @@ import NavBar from "./nav-bar/NavBar";
 import LoginBar from "./login-bar/LoginBar";
 import SiteTitle from "./site-title/SiteTitle";
 import styles from "./HeaderMenu.module.css";
-import useUserAuth from "../store/useUserAuth";
+import useUserAuth from "../../store/useUserAuth";
 import ProfileBar from "./profile-bar/ProfileBar";
 
 export default function HeaderMenu() {

@@ -1,13 +1,35 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import * as authService from "../../services/authService";
+import * as authService from "../services/authService";
+
+const storageState = JSON.parse(localStorage.getItem("authData"));
+
+const initialToken = () => {
+  if (storageState?.state.accessToken) {
+    return storageState.state.accessToken;
+  } else {
+    return "";
+  }
+};
+
+const initialUserData = () => {
+  if (storageState?.state.userData) {
+    return storageState.state.userData;
+  } else {
+    return {};
+  }
+};
+
+const initialIsAuthenticated = () => {
+  return storageState?.state.isAuthenticated;
+};
 
 const useUserAuth = create(
   persist(
     (set) => ({
-      isAuthenticated: false,
+      isAuthenticated: initialIsAuthenticated(),
+      accessToken: initialToken(),
       userData: {},
-      accessToken: "",
 
       register: async (useData) => {
         const user = await authService.register(useData);
@@ -41,7 +63,10 @@ const useUserAuth = create(
     {
       name: "authData",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ accessToken: state.accessToken }),
+      partialize: (state) => ({
+        accessToken: state.accessToken,
+        isAuthenticated: state.isAuthenticated,
+      }),
     }
   )
 );

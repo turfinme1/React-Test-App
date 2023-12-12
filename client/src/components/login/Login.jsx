@@ -1,10 +1,9 @@
 import { Button, Flex, Form, Input, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import * as authService from "../../services/authService";
 
 import styles from "./Login.module.css";
-import useUserAuth from "../store/useUserAuth";
+import useUserAuth from "../../store/useUserAuth";
 
 const formItemLayout = {
   labelCol: {

@@ -10,8 +10,7 @@ const buildOption = (data) => {
   const storageData =JSON.parse(localStorage.getItem("authData"))
 
   console.log(storageData);
-  console.log(storageData.state.accessToken);
-  if (storageData.state.accessToken) {
+  if (storageData?.state.accessToken) {
     options.headers = {
       ...options.headers,
       "content-type": "application/json",

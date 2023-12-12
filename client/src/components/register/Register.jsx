@@ -3,7 +3,7 @@ import { Button, Flex, Form, Input, Select } from "antd";
 
 import * as authService from "../../services/authService";
 import styles from "./Register.module.css";
-import useUserAuth from "../store/useUserAuth";
+import useUserAuth from "../../store/useUserAuth";
 
 const formItemLayout = {
   labelCol: {
