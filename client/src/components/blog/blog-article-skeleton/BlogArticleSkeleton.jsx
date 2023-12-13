@@ -1,8 +1,4 @@
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { EllipsisOutlined, CommentOutlined } from "@ant-design/icons";
 import React from "react";
 import { Card, Skeleton } from "antd";
 import styles from "./BlogArticleSkeleton.module.css";
@@ -20,17 +16,19 @@ export default function BlogArticleSkeleton({ cardsToRender }) {
           width: 500,
         }}
         cover={
-          <Skeleton.Image style={{height:350, width:500}} loading active>
-          </Skeleton.Image>
+          <Skeleton.Image
+            style={{ height: 350, width: 500 }}
+            loading
+            active
+          ></Skeleton.Image>
         }
         actions={[
-          <SettingOutlined key="setting" />,
-          <EditOutlined key="edit" />,
+          <CommentOutlined key="comment" />,
           <EllipsisOutlined key="ellipsis" />,
         ]}
       >
         <Skeleton loading active avatar>
-            <Meta/>
+          <Meta />
         </Skeleton>
       </Card>
     ));

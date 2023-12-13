@@ -27,13 +27,16 @@ export default function CreateArticle({
   onCancelHandle,
   setArticles,
 }) {
+  const [form] = Form.useForm();
+
   const onFinish = async (values) => {
     console.log("Success:", values);
     const result = await articleService.create(values);
-    setArticles(state=> ([...state, result]))
+    setArticles((state) => [result, ...state]);
     console.log(result);
 
-    // form.resetFields();
+    onOkHandle();
+    form.resetFields();
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -48,13 +51,20 @@ export default function CreateArticle({
       onCancel={onCancelHandle}
       footer={(_, { OkBtn, CancelBtn }) => (
         <>
-          <Button>Custom Button</Button>
+          <Button
+            type="danger"
+            htmlType="submit"
+            onClick={form.submit}
+            style={{ background: "#44bd32", color: "#f1f2f6", fontWeight: 600 }}
+          >
+            Create
+          </Button>
           <CancelBtn />
-          <OkBtn />
         </>
       )}
     >
       <Form
+        form={form}
         name="createArticleForm"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -147,7 +157,7 @@ export default function CreateArticle({
           <Input placeholder="Select a picture" />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           wrapperCol={{
             offset: 6,
             span: 16,
@@ -157,11 +167,11 @@ export default function CreateArticle({
             block
             type="danger"
             htmlType="submit"
-            style={{ background: "#bd4235", color: "#f1f2f6" }}
+            style={{ background: "#44bd32", color: "#f1f2f6", fontWeight: 600 }}
           >
             Create
           </Button>
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </Modal>
   );

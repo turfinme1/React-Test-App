@@ -17,7 +17,7 @@ export default function Blog() {
   }));
 
   useEffect(() => {
-    articleService.getAll().then((result) => {
+    articleService.getLatest().then((result) => {
       setArticles(result);
       setIsLoading(false);
     });
