@@ -7,11 +7,13 @@ import styles from "./Blog.module.css";
 import BlogArticleSkeleton from "./blog-article-skeleton/BlogArticleSkeleton";
 import useUserAuth from "../../store/useUserAuth";
 import CreateArticle from "../create-article/CreateArticle";
+import EditArticle from "../edit-article/EditArticle";
 
 export default function Blog() {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { isAuthenticated } = useUserAuth((state) => ({
     isAuthenticated: state.isAuthenticated,
   }));
@@ -24,15 +26,17 @@ export default function Blog() {
   }, []);
 
   const onClickHandle = () => {
-    setIsModalOpen(true);
+    setIsCreateModalOpen(true);
   };
 
   const onOkHandle = () => {
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
   const onCancelHandle = () => {
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
   return (
@@ -56,16 +60,28 @@ export default function Blog() {
       <Flex className={styles.articleList} justify="center" align="center">
         {isLoading && <BlogArticleSkeleton cardsToRender={9} />}
         {articles.map((article) => (
-          <BlogArticleCard key={article._id} {...article} />
+          <BlogArticleCard
+            key={article._id}
+            {...article}
+            setIsEditModalOpen={setIsEditModalOpen}
+            setArticles={setArticles}
+          />
         ))}
       </Flex>
 
       <CreateArticle
-        isModalOpen={isModalOpen}
+        isModalOpen={isCreateModalOpen}
         onOkHandle={onOkHandle}
         onCancelHandle={onCancelHandle}
-        setArticles = {setArticles}
+        setArticles={setArticles}
       />
+
+      {/* <EditArticle
+        isModalOpen={isEditModalOpen}
+        onOkHandle={onOkHandle}
+        onCancelHandle={onCancelHandle}
+        setArticles={setArticles}
+      /> */}
     </Flex>
   );
 }

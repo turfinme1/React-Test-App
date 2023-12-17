@@ -1,6 +1,7 @@
-import styles from "./CreateArticle.module.css";
-import { Button, Modal, Form, Input, Select } from "antd";
+import styles from "./EditArticle.module.css";
+import { Button, Modal, Form, Input } from "antd";
 import * as articleService from "../../services/articleService";
+import { useEffect, useState } from "react";
 
 const formItemLayout = {
   labelCol: {
@@ -21,18 +22,36 @@ const formItemLayout = {
   },
 };
 
-export default function CreateArticle({
+export default function EditArticle({
   isModalOpen,
   onOkHandle,
   onCancelHandle,
   setArticles,
+  articleId,
 }) {
   const [form] = Form.useForm();
+  const [initialValues, setInitialValues] = useState({});
+
+  useEffect(() => {
+    articleService
+      .getOne(articleId)
+      .then((result) => setInitialValues(result))
+      .catch((err) => console.log(err));
+  }, []);
 
   const onFinish = async (values) => {
     console.log("Success:", values);
-    const result = await articleService.create(values);
-    setArticles((state) => [result, ...state]);
+    const result = await articleService.edit(articleId, values);
+    setArticles((state) =>
+      state.reduce((acc, curr) => {
+        if (curr._id == result._id) {
+            return [...acc,result]
+        }
+        else{
+            return [...acc,curr]
+        }
+      }, [])
+    );
     console.log(result);
 
     onOkHandle();
@@ -46,7 +65,7 @@ export default function CreateArticle({
   return (
     <Modal
       open={isModalOpen}
-      title="Create Article"
+      title="Edit Article"
       onOk={onOkHandle}
       onCancel={onCancelHandle}
       footer={(_, { CancelBtn }) => (
@@ -57,7 +76,7 @@ export default function CreateArticle({
             onClick={form.submit}
             style={{ background: "#44bd32", color: "#f1f2f6", fontWeight: 600 }}
           >
-            Create
+            Edit
           </Button>
           <CancelBtn />
         </>
@@ -72,6 +91,7 @@ export default function CreateArticle({
         style={{
           maxWidth: 600,
         }}
+        initialValues={initialValues}
       >
         <Form.Item
           hasFeedback
