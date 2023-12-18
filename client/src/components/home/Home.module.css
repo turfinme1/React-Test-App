@@ -1,16 +1,27 @@
-.frontPageArticleArea{
+.homeWrapper{
     display: flex;
     height: 100vh;
     background-image: url('../../../public/main-article-pic.jpg');
     background-size:cover;
     background-repeat: no-repeat;
+}
+.frontPageArticleArea{
+    display: flex;
     color: rgb(222, 220, 220);
     font-size:1.5em;
-    min-height: 100vh;
 }
 .mainArticle{
-    padding-left: 20vh;
-    padding-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 8em;
+    padding-left: 6em;
+    gap: 0.3em;
+}
+.mainArticle h2{
+    font-size:1.8em;
+}
+.mainArticle button{
+    width: fit-content;
 }
 img{
     object-fit:fill;

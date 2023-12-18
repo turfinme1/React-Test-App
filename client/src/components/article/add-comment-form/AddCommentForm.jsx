@@ -1,6 +1,8 @@
 import { Button, Flex, Form, Input } from "antd";
+
+import * as commentService from "../../../services/commentService";
+
 import styles from "./AddCommentForm.module.css";
-import * as commentService from '../../../services/commentService'
 
 const formItemLayout = {
   labelCol: {
@@ -21,11 +23,23 @@ const formItemLayout = {
   },
 };
 
-export default function AddCommentForm({username, articleId,setComments}) {
-  const onFinish = async ({commentText}) => {
+export default function AddCommentForm({
+  username,
+  userImgUrl,
+  articleId,
+  setComments,
+}) {
+  const [form] = Form.useForm();
+
+  const onFinish = async ({ commentText }) => {
     console.log("Success:", commentText);
-    const comment = await commentService.create({articleId,username,commentText})
-    setComments(state=>[...state,comment])
+    const comment = await commentService.create({
+      articleId,
+      username,
+      commentText,
+    });
+    setComments((state) => [...state, { ...comment, owner: { userImgUrl } }]);
+    form.resetFields();
     console.log(comment);
   };
 
@@ -35,16 +49,15 @@ export default function AddCommentForm({username, articleId,setComments}) {
     <Flex className={styles.formContainer}>
       <span>Comment as: {username} </span>
       <Form
+        form={form}
         className={styles.form}
         name="createArticleForm"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         {...formItemLayout}
-        style={{
-        }}
+        style={{}}
       >
         <Form.Item
-          
           name="commentText"
           rules={[
             {

@@ -1,3 +1,7 @@
+.blogWraper{
+  margin-bottom: 4em;
+}
+
 .articleList {
   flex-wrap: wrap;
   gap: 1.5em 2em;

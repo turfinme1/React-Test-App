@@ -1,7 +1,8 @@
-import styles from "./EditArticle.module.css";
-import { Button, Modal, Form, Input } from "antd";
-import * as articleService from "../../services/articleService";
 import { useEffect, useState } from "react";
+import { Button, Modal, Form, Input } from "antd";
+
+import * as articleService from "../../services/articleService";
+
 
 const formItemLayout = {
   labelCol: {
@@ -85,7 +86,7 @@ export default function EditArticle({
     >
       <Form
         form={form}
-        name="createArticleForm"
+        name="EditArticleForm"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         {...formItemLayout}

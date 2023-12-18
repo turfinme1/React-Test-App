@@ -1,6 +1,7 @@
-import { Flex } from "antd";
-import { GithubFilled} from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { Flex } from "antd";
+import { GithubFilled } from "@ant-design/icons";
+
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -22,13 +23,11 @@ export default function Footer() {
       </Flex>
       <Flex className={styles.copyNav} justify="space-between">
         <div className={styles.copyrightText}>
-          <p>
-            Copyright &copy; 2023, All Right Reserved
-          </p>
+          <p>Copyright &copy; 2023, All Right Reserved</p>
         </div>
         <div className={styles.repo}>
           <GithubFilled />
-            <a href="https://github.com/turfinme1/React-Test-App">Source</a>
+          <a href="https://github.com/turfinme1/React-Test-App">Source</a>
         </div>
         <div className={styles.footerMenu}>
           <ul>
@@ -39,13 +38,7 @@ export default function Footer() {
               <Link to="/blog">Blog</Link>
             </li>
             <li>
-              <Link to="/exercise-guides">Exercise Guides</Link>
-            </li>
-            <li>
               <Link to="/about">About us</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact us</Link>
             </li>
           </ul>
         </div>

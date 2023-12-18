@@ -43,7 +43,7 @@ const useUserAuth = create(
 
       login: async (userData) => {
         const user = await authService.login(userData);
-
+        
         set(() => ({
           userData: user,
           accessToken: user.accessToken,
@@ -53,6 +53,7 @@ const useUserAuth = create(
 
       logout: async () => {
         await authService.logout();
+        
         set(() => ({
           isAuthenticated: false,
           userData: {},

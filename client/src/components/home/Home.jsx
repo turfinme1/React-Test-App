@@ -1,15 +1,44 @@
-import styles from './Home.module.css'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Flex } from "antd";
 
-export default function Home(props){
-    return (
-      <div className={styles.frontPageArticleArea}>
-        <article className={styles.mainArticle}>
-          <button>Hot</button>
-          <h2>8 Best Excercises</h2>
-          <p>Long time readers watch this</p>
-          <p>Oct 29,2023 - by Michel Pfilberg</p>
-          <button>Read more</button>
-        </article>
-      </div>
-    );
+import * as articleService from "../../services/articleService";
+
+import styles from "./Home.module.css";
+
+export default function Home(props) {
+  const [article, setArticle] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      articleService
+        .getLatestSingle()
+        .then((result) => {
+          setArticle(result);
+          console.log(result);
+        })
+        .catch((err) => console.log(err));
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const onClickHandler = () => {
+    navigate(`/blog/${article[0]._id}`);
+  };
+
+  return (
+    <div className={styles.homeWrapper}>
+      {article.map((article) => (
+        <Flex key={article._id} className={styles.frontPageArticleArea}>
+          <article className={styles.mainArticle}>
+            <h2>{article.title}</h2>
+            <p>{article.description}</p>
+            <p>by {article.owner.username}</p>
+            <Button onClick={onClickHandler}>Read more</Button>
+          </article>
+        </Flex>
+      ))}
+    </div>
+  );
 }

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Flex, Form, Input, Select } from "antd";
 
-import * as authService from "../../services/authService";
-import styles from "./Register.module.css";
 import useUserAuth from "../../store/useUserAuth";
+
+import styles from "./Register.module.css";
 
 const formItemLayout = {
   labelCol: {
@@ -30,12 +30,13 @@ export default function Register() {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    console.log("Success:", values);
-    // const result = await authService.register(values);
-    const result = await register(values);
-    console.log(result);
-    // form.resetFields();
-     navigate("/");
+    try {
+      await register(values);
+      form.resetFields();
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {

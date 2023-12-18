@@ -1,7 +1,6 @@
 .footer {
   background: #151414;
   flex-direction: column;
-  margin-top: 4em;
   border-top: 3px solid #e842185d;
   border-bottom: 3px solid #e842185d;
 }
@@ -57,10 +56,13 @@
 .copyrightText p a {
   color: #ff5e14;
 }
-.footerMenu li {
-  display: inline-block;
-  margin-left: 20px;
+.footerMenu ul{
+  display: flex;
+  gap: 1em;
 }
+.footerMenu li {
+  all: unset;
+} 
 .footerMenu li:hover a {
   color: #ff5e14;
 }

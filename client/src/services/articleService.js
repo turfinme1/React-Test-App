@@ -17,6 +17,15 @@ export const getLatest = async () => {
   return result;
 };
 
+export const getLatestSingle = async () => {
+  const query = new URLSearchParams({
+    pageSize: 1,
+    load: `owner=_ownerId:users`,
+  });
+  const result = await request.get(`${baseUrl}?${query}`);
+  return result;
+};
+
 export const create = async (articleData) => {
   const result = await request.post(baseUrl, articleData);
   return result;

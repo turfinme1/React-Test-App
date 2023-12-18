@@ -10,6 +10,7 @@ export const create = async (data) => {
 export const getAll = async (articleId) => {
   const query = new URLSearchParams({
     where: `articleId="${articleId}"`,
+    load: `owner=_ownerId:users`,
   });
 
   const result = await request.get(`${baseUrl}?${query}`);

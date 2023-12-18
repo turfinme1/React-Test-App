@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Button, Flex } from "antd";
 
-import * as articleService from "../../services/articleService";
 import BlogArticleCard from "./blog-article-card/BlogArticleCard";
-import styles from "./Blog.module.css";
 import BlogArticleSkeleton from "./blog-article-skeleton/BlogArticleSkeleton";
-import useUserAuth from "../../store/useUserAuth";
 import CreateArticle from "../create-article/CreateArticle";
-import EditArticle from "../edit-article/EditArticle";
+import useUserAuth from "../../store/useUserAuth";
+
+import * as articleService from "../../services/articleService";
+
+import styles from "./Blog.module.css";
 
 export default function Blog() {
   const [articles, setArticles] = useState([]);
@@ -37,12 +38,12 @@ export default function Blog() {
   };
 
   return (
-    <Flex align="center" vertical>
+    <Flex align="center" vertical className={styles.blogWraper}>
       <Flex
         className={styles.articleOptions}
         align="center"
         justify="space-between"
-      >
+      > 
         <h2 className={styles.articleHeading}>Latest Articles</h2>
         {isAuthenticated && (
           <Button

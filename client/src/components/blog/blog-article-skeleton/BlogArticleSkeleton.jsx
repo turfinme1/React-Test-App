@@ -1,7 +1,7 @@
-import { EllipsisOutlined, CommentOutlined } from "@ant-design/icons";
 import React from "react";
 import { Card, Skeleton } from "antd";
-import styles from "./BlogArticleSkeleton.module.css";
+import { EllipsisOutlined, CommentOutlined } from "@ant-design/icons";
+
 
 const { Meta } = Card;
 

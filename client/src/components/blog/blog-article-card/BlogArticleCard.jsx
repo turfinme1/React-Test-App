@@ -1,27 +1,26 @@
-import { ShareAltOutlined, CommentOutlined } from "@ant-design/icons";
-import { Avatar, Card, message } from "antd";
-import styles from "./BlogArticleCard.module.css";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Avatar, Card, message } from "antd";
+import { ShareAltOutlined, CommentOutlined } from "@ant-design/icons";
+
 import DropdownCardMenu from "../dropdown-card-menu/DropdownCardMenu";
 import EditArticle from "../../edit-article/EditArticle";
-import { useState } from "react";
 import useUserAuth from "../../../store/useUserAuth";
+
+import styles from "./BlogArticleCard.module.css";
 
 const { Meta } = Card;
 
 export default function BlogArticleCard({
   title,
   description,
-  articleText,
   imgUrl,
   _id,
   _ownerId,
-  _createdOn,
   setArticles,
 }) {
   const navigate = useNavigate();
   const { userData } = useUserAuth((state) => ({ userData: state.userData }));
-  //
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const onOkHandle = () => {
@@ -31,7 +30,6 @@ export default function BlogArticleCard({
   const onCancelHandle = () => {
     setIsEditModalOpen(false);
   };
-  //
 
   const onShareIconClick = (e) => {
     e.stopPropagation();
@@ -68,18 +66,7 @@ export default function BlogArticleCard({
           width: 500,
         }}
         cover={<img className={styles.cardImg} alt={title} src={imgUrl} />}
-        actions={
-          actions
-          // <CommentOutlined key="comment" onClick={onCommentIconClick} />,
-          // <ShareAltOutlined key="share" onClick={onShareIconClick} />,
-
-          // <DropdownCardMenu
-          //   articleId={_id}
-          //   key="ellipsis"
-          //   setArticles={setArticles}
-          //   setIsEditModalOpen={setIsEditModalOpen}
-          // />,
-        }
+        actions={actions}
       >
         <Meta
           className={styles.cardBody}

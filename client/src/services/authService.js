@@ -15,6 +15,4 @@ export const login = async (userData) => {
 export const logout = async () => {
   const result = await request.get(`${baseUrl}/logout`);
   return result;
-  // can logout without token?
-  // no return result?
 };

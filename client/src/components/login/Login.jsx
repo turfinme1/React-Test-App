@@ -1,9 +1,10 @@
-import { Button, Flex, Form, Input, Select } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Flex, Form, Input, Select } from "antd";
 
+import useUserAuth from "../../store/useUserAuth";
 
 import styles from "./Login.module.css";
-import useUserAuth from "../../store/useUserAuth";
 
 const formItemLayout = {
   labelCol: {
@@ -27,19 +28,19 @@ const formItemLayout = {
 export default function Login() {
   const { login } = useUserAuth((state) => ({ login: state.login }));
   const [form] = Form.useForm();
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
     console.log("Success:", values);
-    // const result = authService
-    //   .login(values)
-    //   .then((result) => console.log(result))
-    //   .catch(() => onFinishFailed("user doesnt exist"));
-
-    const result = await login(values);
-
-    // form.resetFields();
-    navigate("/");
+    try {
+      await login(values);
+      setError(null);
+      form.resetFields();
+      navigate("/");
+    } catch (error) {
+      setError("Credentials do not match.");
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -98,6 +99,17 @@ export default function Login() {
           >
             <Input.Password placeholder="Enter your password" />
           </Form.Item>
+
+          {error && (
+            <Form.Item
+              wrapperCol={{
+                offset: 6,
+                span: 16,
+              }}
+            >
+              <div style={{ color: "red" }}>{error}</div>
+            </Form.Item>
+          )}
 
           <Form.Item
             wrapperCol={{
