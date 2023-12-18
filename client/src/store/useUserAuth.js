@@ -29,7 +29,7 @@ const useUserAuth = create(
     (set) => ({
       isAuthenticated: initialIsAuthenticated(),
       accessToken: initialToken(),
-      userData: {},
+      userData: initialUserData(),
 
       register: async (useData) => {
         const user = await authService.register(useData);
@@ -66,6 +66,7 @@ const useUserAuth = create(
       partialize: (state) => ({
         accessToken: state.accessToken,
         isAuthenticated: state.isAuthenticated,
+        userData : {_id: state.userData._id, username:state.userData.username}
       }),
     }
   )

@@ -39,7 +39,6 @@ export default function Login() {
     const result = await login(values);
 
     // form.resetFields();
-    // ako si na register i sled tova na login shte te vurne na register vupreki che si lognat?
     navigate("/");
   };
 

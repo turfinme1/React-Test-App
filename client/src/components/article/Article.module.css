@@ -3,7 +3,7 @@
 }
 .article {
   flex-direction: column;
-  max-width: 50vw;
+  width: 50vw;
   gap: 3em;
   border: 3px solid rgb(169, 157, 157);
   margin-top: 3em;

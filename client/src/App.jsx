@@ -27,7 +27,6 @@ function App() {
 
         <Route path="/profile" element={<AddCommentForm />} />
 
-        {/* <Route path="/create-article" element={<CreateArticle />} /> */}
         <Route path="/about" element={<About />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

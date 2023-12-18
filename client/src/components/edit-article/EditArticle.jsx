@@ -42,6 +42,7 @@ export default function EditArticle({
   const onFinish = async (values) => {
     console.log("Success:", values);
     const result = await articleService.edit(articleId, values);
+    
     setArticles((state) =>
       state.reduce((acc, curr) => {
         if (curr._id == result._id) {

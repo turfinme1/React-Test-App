@@ -48,7 +48,7 @@ export default function DropdownCardMenu({
     <Dropdown
       menu={{ items }}
       trigger={["click"]}
-      placement="topCenter"
+      placement="top"
       open={open}
       onOpenChange={handleOpenChange}
     >

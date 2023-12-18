@@ -1,5 +1,6 @@
 import { Button, Flex, Form, Input } from "antd";
 import styles from "./AddCommentForm.module.css";
+import * as commentService from '../../../services/commentService'
 
 const formItemLayout = {
   labelCol: {
@@ -20,9 +21,12 @@ const formItemLayout = {
   },
 };
 
-export default function AddCommentForm({username}) {
-  const onFinish = async (values) => {
-    console.log("Success:", values);
+export default function AddCommentForm({username, articleId,setComments}) {
+  const onFinish = async ({commentText}) => {
+    console.log("Success:", commentText);
+    const comment = await commentService.create({articleId,username,commentText})
+    setComments(state=>[...state,comment])
+    console.log(comment);
   };
 
   const onFinishFailed = (errorInfo) => {};

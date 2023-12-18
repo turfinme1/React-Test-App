@@ -13,7 +13,6 @@ export default function Blog() {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { isAuthenticated } = useUserAuth((state) => ({
     isAuthenticated: state.isAuthenticated,
   }));
@@ -31,12 +30,10 @@ export default function Blog() {
 
   const onOkHandle = () => {
     setIsCreateModalOpen(false);
-    setIsEditModalOpen(false);
   };
 
   const onCancelHandle = () => {
     setIsCreateModalOpen(false);
-    setIsEditModalOpen(false);
   };
 
   return (
@@ -63,7 +60,6 @@ export default function Blog() {
           <BlogArticleCard
             key={article._id}
             {...article}
-            setIsEditModalOpen={setIsEditModalOpen}
             setArticles={setArticles}
           />
         ))}

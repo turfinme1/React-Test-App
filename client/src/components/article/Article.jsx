@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Flex } from "antd";
 
 import * as articleService from "../../services/articleService";
+import * as commentService from "../../services/commentService";
 
 import useUserAuth from "../../store/useUserAuth";
 import AddCommentForm from "./add-comment-form/AddCommentForm";
@@ -11,6 +12,7 @@ import styles from "./Article.module.css";
 export default function Article() {
   const { articleId } = useParams();
   const [article, setArticle] = useState({});
+  const [comments, setComments] = useState([]);
   const { isAuthenticated, userData } = useUserAuth((state) => ({
     isAuthenticated: state.isAuthenticated,
     userData: state.userData,
@@ -21,6 +23,8 @@ export default function Article() {
       .getOne(articleId)
       .then((result) => setArticle(result))
       .catch((err) => console.log(err));
+
+    commentService.getAll(articleId).then((result) => setComments(result));
   }, []);
   // da si oparavq layout-a i da dobavq user info na posta (created by:user)
   // delete edit ako si owner
@@ -35,14 +39,18 @@ export default function Article() {
           <p>{article.articleText}</p>
         </Flex>
         <Flex className={styles.addCommentForm}>
-          {isAuthenticated && <AddCommentForm username={userData.username}/>}
+          {isAuthenticated && (
+            <AddCommentForm
+              username={userData.username}
+              articleId={articleId}
+              setComments={setComments}
+            />
+          )}
         </Flex>
         <Flex className={styles.comments}>
           <span>Comments:</span>
-          <p>{article.articleText}</p>
-          <p>{article.articleText}</p>
-          <p>{article.articleText}</p>
-          <p>{article.articleText}</p>
+          {comments.map(comment=>(<p key={comment._id}>{comment.commentText}</p>))}
+
         </Flex>
       </Flex>
     </Flex>
